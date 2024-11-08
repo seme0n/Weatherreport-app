@@ -4,20 +4,25 @@ import android.os.Bundle
 import android.telecom.Call.Details
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -28,7 +33,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -82,39 +89,41 @@ fun WeatherReportTheme(
             }
 
             ExposedDropdownMenuBox(
-                modifier = modifier,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = 22.dp,
+                        vertical = 24.dp
+                    ),
                 expanded = isExpanded.value,
                 onExpandedChange = { isExpanded.value = it },
                 content = {
-
-                    Text(
-                        text = selectedItem,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .menuAnchor()
-                    )
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(
-                                horizontal = 22.dp,
-                                vertical = 24.dp
-                            )
+                            .menuAnchor()
                             .background(
                                 color = Color.Black.copy(0.05f),
                                 shape = RoundedCornerShape(12.dp)
                             )
                             .padding(
-                                horizontal = 22.dp,
-                                vertical = 20.dp
+                                horizontal = 8.dp,
+                                vertical = 10.dp
                             ),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
 
                     )
-
                     {
-
+                        Text(
+                            text = selectedItem,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = Color.Black,
+                            fontFamily = FontFamily(listOf(Font(R.font.montserrat_medium))),
+                            modifier = Modifier
+                        )
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded.value)
                     }
 
                     ExposedDropdownMenu(
@@ -154,7 +163,8 @@ fun WeatherReportTheme(
                     ),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
-            ) {
+            )
+            {
                 DetailsTextBlock(
                     title = "Время",
                     subtitle = localTime
@@ -172,12 +182,62 @@ fun WeatherReportTheme(
                     subtitle = "$humidity %"
                 )
             }
-        },
+                    },
+
 
         ) {
+        Box(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ){
+            Box(
+                modifier = Modifier
+                    .blur(50.dp)
+                    .padding(40.dp)
+                    .fillMaxWidth(1f)
+                    .fillMaxHeight(0.5f)
+                    .background(
+                        color = Color(0xFF9BB7F2).copy(0.7f),
+                    shape = CircleShape
+                    )
+            )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.partly_cloudy_day),
+                    contentDescription = null
+                )
+               Text(
+                   text = "Облачно",
+                   fontSize = 30.sp,
+                   fontWeight = FontWeight.SemiBold,
+                   color = Color.White,
+                   fontFamily = FontFamily(listOf(Font(R.font.montserrat_semibold))),
+
+               )
+                Row() {
+                Text (
+                    text = "31",
+                    fontSize = 70.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.White,
+                    fontFamily = FontFamily(listOf(Font(R.font.montserrat_semibold))),
+                )
+                    Image(
+                        painter = painterResource(id = R.drawable.ellipse_1),
+                        contentDescription = null
+                    )
+            }
+            }
+        }
     }
 
 }
+
 
 @Composable
 fun DetailsTextBlock(
@@ -202,6 +262,7 @@ fun DetailsTextBlock(
             color = Color.Black,
             fontFamily = FontFamily(listOf(Font(R.font.montserrat_medium)))
         )
+
     }
 }
 
@@ -270,4 +331,5 @@ fun DropdownMenuExamplePreview() {
         )
     }
 }
+
 
